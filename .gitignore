@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+*.pt
+*.onnx
+*.db
+*.sqlite3
+node_modules/
+dist/
+outputs/
+finance-audit.jsonl

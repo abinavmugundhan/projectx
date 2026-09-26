@@ -1,0 +1,5 @@
+{
+  "allowedSymbols": ["AAPL", "MSFT", "SPY"],
+  "maxPositionFraction": 0.10,
+  "maxTradeFraction": 0.05
+}
