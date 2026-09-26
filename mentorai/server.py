@@ -1,10 +1,13 @@
 """Optional FastAPI transport around the local index."""
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from pathlib import Path
+import os
 from pydantic import BaseModel, Field
 from rag import MentorIndex
 
 app = FastAPI(title='MentorAI')
-index = MentorIndex()
+index = MentorIndex(os.getenv("MENTOR_DB", "mentorai.sqlite3"))
 
 
 class Document(BaseModel):
@@ -30,3 +33,7 @@ def ask(query: Question):
 @app.get('/health')
 def health():
     return {'status': 'ok'}
+
+@app.get('/')
+def home():
+    return FileResponse(Path(__file__).with_name('index.html'))

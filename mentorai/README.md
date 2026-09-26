@@ -10,3 +10,5 @@ curl -X POST localhost:8000/ask -H 'Content-Type: application/json' -d '{"questi
 ```
 
 Bring licensed documents and evaluate retrieval on held out questions before making production claims. The local database is ignored by git.
+
+Open `http://localhost:8000/` for the browser interface. Docker: `docker build -t mentorai mentorai && docker run --rm -p 8000:8000 -v "$PWD/mentorai-data:/app/data" -w /app mentorai` (add `-e MENTOR_DB=/app/data/mentorai.sqlite3` to persist indexed passages).

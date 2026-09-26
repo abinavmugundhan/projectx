@@ -48,6 +48,11 @@ if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).
   const livePaper = process.argv.includes('--submit-paper');
   let result = null;
   if (livePaper && verdict.approved) result = await paperOrder(verdict.order, process.env.ALPACA_PAPER_KEY, process.env.ALPACA_PAPER_SECRET);
-  audit({ signal, verdict, submitted: Boolean(result), paperOrderId: result?.id || null }, 'finance-audit.jsonl');
-  console.log(JSON.stringify({ ...verdict, submitted: Boolean(result), paperOrderId: result?.id || null }, null, 2));
+  let explanation = null;
+  if (process.argv.includes('--explain')) {
+    const { explain } = await import('./ollama.mjs');
+    explanation = await explain(signal, verdict);
+  }
+  audit({ signal, verdict, submitted: Boolean(result), paperOrderId: result?.id || null, explanation }, 'finance-audit.jsonl');
+  console.log(JSON.stringify({ ...verdict, submitted: Boolean(result), paperOrderId: result?.id || null, explanation }, null, 2));
 }

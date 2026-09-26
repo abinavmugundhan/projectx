@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MentorAI</title>
+<style>
+body{font:16px system-ui;background:#f5f7fb;color:#17233b;margin:0}main{max-width:760px;margin:3rem auto;padding:1.5rem}section{background:white;padding:1.5rem;margin:1rem 0;border-radius:12px;box-shadow:0 2px 16px #17233b11}textarea,input,button{font:inherit;box-sizing:border-box;width:100%;padding:.8rem;margin:.4rem 0;border:1px solid #bec8da;border-radius:8px}textarea{height:130px}button{background:#194fb7;color:white;cursor:pointer}button:hover{background:#123981}a{color:#194fb7}#sources{white-space:pre-wrap} .muted{color:#506078}
+</style>
+<main><h1>MentorAI</h1><p class="muted">Add your study notes, then ask a question. Answers show their document sources.</p>
+<section><h2>1. Add a document</h2><label for="name">Document name</label><input id="name" placeholder="e.g. Python notes"><label for="document">Text</label><textarea id="document" placeholder="Paste your notes here"></textarea><button id="add">Index document</button><p id="upload-status" role="status"></p></section>
+<section><h2>2. Ask</h2><label for="question">Question</label><input id="question" placeholder="What did my notes say about SQL?"><button id="ask">Find answer</button><p id="answer" role="status"></p><p id="sources" class="muted"></p></section></main>
+<script>
+async function post(path, body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw Error('Request failed: '+r.status);return r.json()}
+document.querySelector('#add').onclick=async()=>{try{let d=await post('/documents',{name:document.querySelector('#name').value,text:document.querySelector('#document').value});document.querySelector('#upload-status').textContent='Indexed '+d.indexed}catch(e){document.querySelector('#upload-status').textContent=e.message}};
+document.querySelector('#ask').onclick=async()=>{try{let d=await post('/ask',{question:document.querySelector('#question').value});document.querySelector('#answer').textContent=d.answer;document.querySelector('#sources').textContent=d.sources.map(s=>s.source+' · passage '+(s.chunk+1)).join('\n')}catch(e){document.querySelector('#answer').textContent=e.message}};
+</script></html>
